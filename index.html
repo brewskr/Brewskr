@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brewskr — The real-world social app. Post a Shoutout. Find your circle. Meet IRL.">
+  <meta name="keywords" content="social app, meetup, friends, local, shoutout, craft beer, IRL, real life social">
+  <meta property="og:title" content="Brewskr — B.Social. Meet in Real Life.">
+  <meta property="og:description" content="Post a Shoutout. Find your circle. Connect face-to-face. Download Brewskr free.">
+  <meta property="og:image" content="og-image.jpg">
+  <meta property="og:url" content="https://brewskr.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Brewskr — B.Social. Meet in Real Life.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & VARIABLES ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --amber:     #F2A93B;
+      --amber-dark:#C8820A;
+      --signal:    #FF6B35;
+      --espresso:  #1A1208;
+      --cream:     #F5EDE0;
+      --copper:    #C8820A;
+      --muted:     #7A6040;
+      --cream-light: #FBF7F1;
+      --white:     #FFFFFF;
+      --card-bg:   rgba(255,255,255,0.06);
+      --border:    rgba(242,169,59,0.2);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--espresso);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ──────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(26,18,8,0.85);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--amber); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: rgba(245,237,224,0.7);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--amber); }
+
+    .nav-cta {
+      background: var(--amber);
+      color: var(--espresso) !important;
+      font-weight: 600 !important;
+      padding: 10px 22px;
+      border-radius: 50px;
+      transition: all 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--amber-dark) !important; color: var(--white) !important; transform: translateY(-1px); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--cream); border-radius: 2px; transition: all 0.3s; }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 40px 80px;
+    }
+
+    /* Radial glow background */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(ellipse at center,
+        rgba(242,169,59,0.15) 0%,
+        rgba(255,107,53,0.08) 30%,
+        transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: float-orb 8s ease-in-out infinite;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: rgba(242,169,59,0.08);
+      top: 10%; left: -10%;
+      animation-delay: 0s;
+    }
+    .orb-2 {
+      width: 300px; height: 300px;
+      background: rgba(255,107,53,0.06);
+      bottom: 10%; right: -5%;
+      animation-delay: 3s;
+    }
+    .orb-3 {
+      width: 200px; height: 200px;
+      background: rgba(200,130,10,0.1);
+      top: 50%; left: 60%;
+      animation-delay: 5s;
+    }
+    @keyframes float-orb {
+      0%, 100% { transform: translate(0,0); }
+      50% { transform: translate(20px,-30px); }
+    }
+
+    .hero-content {
+      max-width: 900px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(242,169,59,0.12);
+      border: 1px solid rgba(242,169,59,0.3);
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--amber);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: fade-up 0.8s ease both;
+    }
+    .hero-pill::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--signal);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .hero-headline {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--cream);
+      margin-bottom: 12px;
+      animation: fade-up 0.8s ease 0.1s both;
+    }
+    .hero-headline .accent { color: var(--amber); }
+    .hero-headline .italic-word {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.9em;
+      color: var(--signal);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 300;
+      color: rgba(245,237,224,0.65);
+      line-height: 1.6;
+      max-width: 580px;
+      margin: 0 auto 40px;
+      animation: fade-up 0.8s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fade-up 0.8s ease 0.3s both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--amber);
+      color: var(--espresso);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 16px 32px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 24px rgba(242,169,59,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--amber-dark);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(242,169,59,0.4);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
+      padding: 16px 28px;
+      border-radius: 50px;
+      border: 1px solid rgba(245,237,224,0.2);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .btn-ghost:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      animation: fade-up 0.8s ease 0.4s both;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--amber);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: rgba(245,237,224,0.5);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MARQUEE ─────────────────────────────────────── */
+    .marquee-wrap {
+      overflow: hidden;
+      padding: 20px 0;
+      background: rgba(242,169,59,0.06);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 48px;
+      animation: marquee-scroll 30s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245,237,224,0.4);
+      flex-shrink: 0;
+    }
+    .marquee-item .dot { color: var(--amber); font-size: 1.2rem; }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION BASE ────────────────────────────────── */
+    section { position: relative; }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 40px;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      margin-bottom: 20px;
+    }
+    .section-subtitle {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: rgba(245,237,224,0.6);
+      line-height: 1.7;
+      max-width: 540px;
+    }
+
+    /* ── HOW IT WORKS ────────────────────────────────── */
+    #how {
+      background: linear-gradient(180deg, transparent 0%, rgba(242,169,59,0.03) 50%, transparent 100%);
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2px;
+      margin-top: 64px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .step-card {
+      padding: 40px 32px;
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      transition: background 0.3s ease;
+      position: relative;
+    }
+    .step-card:last-child { border-right: none; }
+    .step-card:hover { background: rgba(242,169,59,0.07); }
+
+    .step-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 3.5rem;
+      color: rgba(242,169,59,0.15);
+      line-height: 1;
+      margin-bottom: 20px;
+      display: block;
+      transition: color 0.3s;
+    }
+    .step-card:hover .step-number { color: rgba(242,169,59,0.3); }
+    .step-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--cream);
+      margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: rgba(245,237,224,0.55);
+      line-height: 1.6;
+    }
+
+    /* ── FEATURES ────────────────────────────────────── */
+    #features {
+      background: var(--cream-light);
+    }
+    #features .section-title,
+    #features .section-label { color: var(--espresso); }
+    #features .section-title .accent { color: var(--amber-dark); }
+    #features .section-subtitle { color: rgba(26,18,8,0.6); }
+
+    .features-bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 16px;
+      margin-top: 64px;
+    }
+    .feat {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 36px 32px;
+      border: 1px solid rgba(26,18,8,0.08);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .feat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(26,18,8,0.12);
+      border-color: var(--amber);
+    }
+    .feat-1 { grid-column: span 7; }
+    .feat-2 { grid-column: span 5; }
+    .feat-3 { grid-column: span 5; }
+    .feat-4 { grid-column: span 7; }
+    .feat-5 { grid-column: span 4; }
+    .feat-6 { grid-column: span 4; }
+    .feat-7 { grid-column: span 4; }
+
+    .feat-emoji {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .feat-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--espresso);
+      margin-bottom: 10px;
+    }
+    .feat-tag {
+      display: inline-block;
+      background: rgba(200,130,10,0.1);
+      color: var(--amber-dark);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .feat-tag.live { background: rgba(255,107,53,0.12); color: var(--signal); }
+    .feat-tag.new  { background: rgba(46,125,50,0.12); color: #2E7D32; }
+    .feat-desc {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: rgba(26,18,8,0.55);
+      line-height: 1.7;
+    }
+    .feat-large-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--espresso);
+      line-height: 1.1;
+      margin-top: 12px;
+    }
+
+    /* ── TAP FEATURE SPOTLIGHT ───────────────────────── */
+    #tap {
+      overflow: hidden;
+    }
+    .tap-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 40px;
+    }
+    .tap-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tap-phones {
+      position: relative;
+      width: 320px;
+      height: 360px;
+    }
+    .phone-mockup {
+      position: absolute;
+      width: 160px;
+      height: 280px;
+      background: linear-gradient(145deg, #2A1F12, #1A1208);
+      border-radius: 28px;
+      border: 2px solid rgba(242,169,59,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5),
+                  inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .phone-a {
+      left: 0; top: 40px;
+      transform: rotate(-8deg);
+    }
+    .phone-b {
+      right: 0; top: 40px;
+      transform: rotate(8deg);
+    }
+    .tap-phones:hover .phone-a { transform: rotate(-2deg) translateX(30px); }
+    .tap-phones:hover .phone-b { transform: rotate(2deg) translateX(-30px); }
+    .tap-spark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      animation: spark-pulse 2s ease-in-out infinite;
+      z-index: 10;
+    }
+    @keyframes spark-pulse {
+      0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      50% { transform: translate(-50%,-50%) scale(1.4); opacity: 0.7; }
+    }
+    .nfc-rings {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .nfc-ring {
+      position: absolute;
+      border: 1px solid rgba(242,169,59,0.2);
+      border-radius: 50%;
+      transform: translate(-50%,-50%);
+      animation: ring-expand 3s ease-out infinite;
+    }
+    .nfc-ring:nth-child(1) { width: 80px; height: 80px; animation-delay: 0s; }
+    .nfc-ring:nth-child(2) { width: 140px; height: 140px; animation-delay: 0.8s; }
+    .nfc-ring:nth-child(3) { width: 200px; height: 200px; animation-delay: 1.6s; }
+    @keyframes ring-expand {
+      0%   { opacity: 0.6; transform: translate(-50%,-50%) scale(0.8); }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(1.5); }
+    }
+
+    .tap-content .section-label { margin-bottom: 16px; }
+    .tap-feature-list {
+      list-style: none;
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .tap-feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.95rem;
+      color: rgba(245,237,224,0.75);
+      line-height: 1.6;
+    }
+    .tap-feature-list li .icon {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: rgba(242,169,59,0.12);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* ── WAITLIST ────────────────────────────────────── */
+    #waitlist {
+      background: linear-gradient(135deg,
+        rgba(242,169,59,0.08) 0%,
+        rgba(255,107,53,0.05) 50%,
+        rgba(200,130,10,0.08) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .waitlist-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      text-align: center;
+    }
+    .waitlist-inner .section-title { font-size: clamp(2rem,5vw,3.5rem); }
+
+    .waitlist-form {
+      display: flex;
+      gap: 12px;
+      margin-top: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .waitlist-input {
+      flex: 1;
+      background: rgba(245,237,224,0.08);
+      border: 1px solid rgba(245,237,224,0.15);
+      border-radius: 50px;
+      padding: 16px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .waitlist-input::placeholder { color: rgba(245,237,224,0.35); }
+    .waitlist-input:focus { border-color: var(--amber); }
+    .waitlist-btn {
+      background: var(--amber);
+      color: var(--espresso);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 16px 28px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .waitlist-btn:hover {
+      background: var(--amber-dark);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+    .waitlist-note {
+      font-size: 0.8rem;
+      color: rgba(245,237,224,0.35);
+      margin-top: 14px;
+    }
+    .waitlist-success {
+      display: none;
+      background: rgba(46,125,50,0.15);
+      border: 1px solid rgba(46,125,50,0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 16px;
+      color: #81C784;
+      font-size: 1rem;
+    }
+
+    /* ── CITIES ──────────────────────────────────────── */
+    #cities {
+      background: var(--cream-light);
+    }
+    #cities .section-title { color: var(--espresso); }
+    #cities .section-label { color: var(--amber-dark); }
+    #cities .section-subtitle { color: rgba(26,18,8,0.55); }
+
+    .cities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 56px;
+    }
+    .city-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 28px 24px;
+      border: 1px solid rgba(26,18,8,0.08);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .city-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--amber);
+      box-shadow: 0 12px 40px rgba(26,18,8,0.1);
+    }
+    .city-card.launch {
+      background: linear-gradient(135deg, var(--espresso) 0%, #2A1F12 100%);
+      border-color: var(--amber);
+    }
+    .city-card.launch .city-name { color: var(--cream); }
+    .city-card.launch .city-state { color: rgba(245,237,224,0.5); }
+    .launch-badge {
+      display: inline-block;
+      background: var(--signal);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .city-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .city-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--espresso);
+      display: block;
+    }
+    .city-state {
+      font-size: 0.8rem;
+      color: rgba(26,18,8,0.45);
+      display: block;
+      margin-top: 4px;
+    }
+    .city-status {
+      font-size: 0.75rem;
+      color: var(--amber-dark);
+      font-weight: 500;
+      margin-top: 8px;
+      display: block;
+    }
+
+    /* ── SAFETY ──────────────────────────────────────── */
+    #safety .section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .safety-list { list-style: none; margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
+    .safety-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .safety-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(242,169,59,0.1);
+      border: 1px solid rgba(242,169,59,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .safety-text strong {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      color: var(--cream);
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+    .safety-text p {
+      font-size: 0.85rem;
+      color: rgba(245,237,224,0.5);
+      line-height: 1.6;
+    }
+    .safety-visual {
+      position: relative;
+      padding: 40px;
+    }
+    .safety-card-stack {
+      position: relative;
+      height: 320px;
+    }
+    .s-card {
+      position: absolute;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      transition: all 0.4s ease;
+    }
+    .s-card-1 { bottom: 0; left: 0; right: 0; transform: rotate(-3deg); }
+    .s-card-2 { bottom: 30px; left: 10px; right: 10px; transform: rotate(1deg); }
+    .s-card-3 { bottom: 60px; left: 0; right: 0; background: rgba(242,169,59,0.08); border-color: rgba(242,169,59,0.3); }
+    .s-card-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+    .s-card-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--cream); }
+
+    /* ── PRICING ─────────────────────────────────────── */
+    #pricing {
+      background: var(--cream-light);
+    }
+    #pricing .section-title { color: var(--espresso); }
+    #pricing .section-label { color: var(--amber-dark); }
+    #pricing .section-subtitle { color: rgba(26,18,8,0.55); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+      align-items: start;
+    }
+    .price-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 36px 32px;
+      border: 1px solid rgba(26,18,8,0.1);
+      transition: all 0.3s ease;
+    }
+    .price-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(26,18,8,0.12);
+    }
+    .price-card.featured {
+      background: var(--espresso);
+      border-color: var(--amber);
+      box-shadow: 0 0 0 2px var(--amber), 0 24px 60px rgba(242,169,59,0.2);
+      transform: scale(1.03);
+    }
+    .price-card.featured:hover { transform: scale(1.03) translateY(-6px); }
+
+    .price-badge {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--espresso);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .price-tier {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--espresso);
+      margin-bottom: 8px;
+    }
+    .price-card.featured .price-tier { color: var(--cream); }
+    .price-amount {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin: 20px 0;
+    }
+    .price-currency {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--amber-dark);
+    }
+    .price-card.featured .price-currency { color: var(--amber); }
+    .price-number {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 3.2rem;
+      color: var(--espresso);
+      line-height: 1;
+    }
+    .price-card.featured .price-number { color: var(--cream); }
+    .price-period {
+      font-size: 0.85rem;
+      color: rgba(26,18,8,0.4);
+    }
+    .price-card.featured .price-period { color: rgba(245,237,224,0.4); }
+    .price-desc {
+      font-size: 0.85rem;
+      color: rgba(26,18,8,0.5);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(26,18,8,0.08);
+    }
+    .price-card.featured .price-desc {
+      color: rgba(245,237,224,0.5);
+      border-bottom-color: rgba(245,237,224,0.1);
+    }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .price-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: rgba(26,18,8,0.7);
+    }
+    .price-card.featured .price-features li { color: rgba(245,237,224,0.75); }
+    .price-features li::before {
+      content: '✓';
+      color: var(--amber-dark);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .price-card.featured .price-features li::before { color: var(--amber); }
+    .price-cta {
+      display: block;
+      text-align: center;
+      margin-top: 28px;
+      padding: 14px;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid rgba(26,18,8,0.2);
+      color: var(--espresso);
+    }
+    .price-card.featured .price-cta {
+      background: var(--amber);
+      color: var(--espresso);
+      border-color: var(--amber);
+    }
+    .price-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: #0E0A04;
+      border-top: 1px solid var(--border);
+      padding: 60px 40px 40px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+    .footer-brand .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: var(--cream);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 14px;
+    }
+    .footer-brand .logo span { color: var(--amber); }
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: rgba(245,237,224,0.35);
+      line-height: 1.7;
+      max-width: 260px;
+    }
+    .footer-col h4 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a {
+      font-size: 0.85rem;
+      color: rgba(245,237,224,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--amber); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(245,237,224,0.08);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-bottom p {
+      font-size: 0.8rem;
+      color: rgba(245,237,224,0.25);
+    }
+    .footer-legal {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-legal a {
+      font-size: 0.8rem;
+      color: rgba(245,237,224,0.25);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-legal a:hover { color: var(--amber); }
+
+    /* ── SCROLL REVEAL ───────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      .features-bento {
+        grid-template-columns: 1fr 1fr;
+      }
+      .feat-1, .feat-2, .feat-3, .feat-4,
+      .feat-5, .feat-6, .feat-7 { grid-column: span 1; }
+      .tap-inner { grid-template-columns: 1fr; gap: 48px; }
+      .tap-visual { order: -1; }
+      #safety .section-inner { grid-template-columns: 1fr; gap: 48px; }
+      .safety-visual { display: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 70px; left: 0; right: 0; background: rgba(26,18,8,0.97); padding: 24px; gap: 20px; border-bottom: 1px solid var(--border); }
+      .hamburger { display: flex; }
+      .hero-stats { gap: 28px; }
+      .waitlist-form { flex-direction: column; }
+      .features-bento { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .section-inner { padding: 70px 20px; }
+      .tap-inner { padding: 70px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="/" class="nav-logo">Brewsk<span>r</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#cities">Cities</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="hero-content">
+      <div class="hero-pill">Now Accepting Founding Members — Wichita Falls, TX</div>
+      <h1 class="hero-headline">
+        Stop scrolling.<br>
+        Start <span class="italic-word">living.</span>
+      </h1>
+      <p class="hero-sub">
+        Brewskr is the app that gets you off your phone and into real life.
+        Post a Shoutout, find your circle, tap to connect — face-to-face.
+      </p>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn-primary">
+          🍺 &nbsp;Join the Waitlist
+        </a>
+        <a href="#how" class="btn-ghost">
+          See how it works ↓
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">IRL</span>
+          <span class="stat-label">Real connections only</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">0</span>
+          <span class="stat-label">Ads. Ever.</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">Free</span>
+          <span class="stat-label">To get started</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">NFC</span>
+          <span class="stat-label">Tap to connect</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="dot">●</span> Shoutout</span>
+      <span class="marquee-item"><span class="dot">●</span> Good Vibes Map</span>
+      <span class="marquee-item"><span class="dot">●</span> Tap to Connect®</span>
+      <span class="marquee-item"><span class="dot">●</span> Circles</span>
+      <span class="marquee-item"><span class="dot">●</span> Zero Ads</span>
+      <span class="marquee-item"><span class="dot">●</span> Real Life Social</span>
+      <span class="marquee-item"><span class="dot">●</span> Craft Beer Approved</span>
+      <span class="marquee-item"><span class="dot">●</span> B.Social</span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item"><span class="dot">●</span> Shoutout</span>
+      <span class="marquee-item"><span class="dot">●</span> Good Vibes Map</span>
+      <span class="marquee-item"><span class="dot">●</span> Tap to Connect®</span>
+      <span class="marquee-item"><span class="dot">●</span> Circles</span>
+      <span class="marquee-item"><span class="dot">●</span> Zero Ads</span>
+      <span class="marquee-item"><span class="dot">●</span> Real Life Social</span>
+      <span class="marquee-item"><span class="dot">●</span> Craft Beer Approved</span>
+      <span class="marquee-item"><span class="dot">●</span> B.Social</span>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="section-inner reveal">
+      <span class="section-label">How it works</span>
+      <h2 class="section-title">Simple as a round of drinks.</h2>
+      <p class="section-subtitle">Brewskr gets out of your way and gets you into the room.</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-number">01</span>
+          <span class="step-icon">🍺</span>
+          <div class="step-title">Post a Shoutout</div>
+          <p class="step-desc">You're at The Rusty Nail. Tap "Shout!" and let your circle know — "We're here, come through." One tap. Done.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">02</span>
+          <span class="step-icon">📍</span>
+          <div class="step-title">They See the Vibe</div>
+          <p class="step-desc">Your circle gets a push notification. Nearby open circles show up on the Good Vibes Map, filtered by shared interests.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">03</span>
+          <span class="step-icon">📲</span>
+          <div class="step-title">Tap to Connect</div>
+          <p class="step-desc">Meet someone new? Tap phones together (NFC) or scan a QR code. Instant connection. Shared interests revealed on screen.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">04</span>
+          <span class="step-icon">🎉</span>
+          <div class="step-title">Good Vibes Happen</div>
+          <p class="step-desc">Real conversations. Real memories. No algorithm needed. This is how we used to meet people — now with a little help.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES BENTO -->
+  <section id="features">
+    <div class="section-inner reveal">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">Everything you need.<br><span class="accent">Nothing you don't.</span></h2>
+      <p class="section-subtitle">Built to connect people, not keep them on their phones.</p>
+
+      <div class="features-bento">
+
+        <div class="feat feat-1">
+          <span class="feat-emoji">📣</span>
+          <div class="feat-tag live">Live Feature</div>
+          <div class="feat-title">Shoutout</div>
+          <p class="feat-desc">The heart of Brewskr. Post a real-time check-in to your Circle: "We're at the brewery, come through." Your people get notified. Non-app friends get a text. Optional: share to Facebook or X to pull in your broader network.</p>
+        </div>
+
+        <div class="feat feat-2">
+          <span class="feat-emoji">🗺️</span>
+          <div class="feat-tag live">Live Feature</div>
+          <div class="feat-title">Good Vibes Map</div>
+          <p class="feat-desc">See where the energy is. Active Circles and venues near you, filtered by your interests. Craft beer people find craft beer bars. Live music fans find live music spots.</p>
+        </div>
+
+        <div class="feat feat-3">
+          <span class="feat-emoji">👥</span>
+          <div class="feat-tag">Core</div>
+          <div class="feat-title">Circles</div>
+          <p class="feat-desc">Named friend groups with collective interest profiles. Open Circles are discoverable on the map. Closed Circles are friends-only. You control who sees what.</p>
+        </div>
+
+        <div class="feat feat-4">
+          <span class="feat-emoji">🚗</span>
+          <div class="feat-tag">Safety</div>
+          <div class="feat-title">Get Home Safe</div>
+          <p class="feat-desc">After a 4-hour bar check-in, Brewskr gently prompts: "Need a ride home?" One tap books an Uber or Lyft. We even have a Designated Driver badge — DDs earn monthly credits for being the hero the night deserves.</p>
+          <div class="feat-large-text">DD gets<br>the love.</div>
+        </div>
+
+        <div class="feat feat-5">
+          <span class="feat-emoji">⚡</span>
+          <div class="feat-tag live">For Businesses</div>
+          <div class="feat-title">Instant Specials</div>
+          <p class="feat-desc">Bars and restaurants push real-time deals to nearby users who match their vibe. No wasted spend — only craft beer fans see craft beer deals.</p>
+        </div>
+
+        <div class="feat feat-6">
+          <span class="feat-emoji">🔒</span>
+          <div class="feat-tag">Privacy</div>
+          <div class="feat-title">Your Name, Your Rules</div>
+          <p class="feat-desc">Use a handle. Change it anytime. Precise location is never shared with other users. Map participation is opt-in and off by default.</p>
+        </div>
+
+        <div class="feat feat-7">
+          <span class="feat-emoji">🎭</span>
+          <div class="feat-tag new">Coming Soon</div>
+          <div class="feat-title">Event Mode</div>
+          <p class="feat-desc">Plan future gatherings with RSVP tracking, reminders, and Circle coordination. Perfect for regular game nights and trivia crews.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TAP TO CONNECT SPOTLIGHT -->
+  <section id="tap">
+    <div class="tap-inner">
+      <div class="tap-visual reveal">
+        <div class="tap-phones">
+          <div class="nfc-rings">
+            <div class="nfc-ring"></div>
+            <div class="nfc-ring"></div>
+            <div class="nfc-ring"></div>
+          </div>
+          <div class="phone-mockup phone-a">📱</div>
+          <div class="phone-mockup phone-b">📱</div>
+          <div class="tap-spark">⚡</div>
+        </div>
+      </div>
+      <div class="tap-content reveal">
+        <span class="section-label">Signature Feature</span>
+        <h2 class="section-title" style="font-size:clamp(2rem,4vw,3rem);">
+          Tap to<br>Connect<span style="color:var(--amber)">®</span>
+        </h2>
+        <p class="section-subtitle">
+          The moment that makes Brewskr unlike anything else. 
+          Two phones. One tap. Instant circle connection — with a reveal of everything you have in common.
+        </p>
+        <ul class="tap-feature-list">
+          <li>
+            <span class="icon">📶</span>
+            <span><strong style="color:var(--cream);display:block;margin-bottom:2px;">NFC — Just Like Apple Pay</strong>Hold phones back-to-back. No app juggling. No typing. Same tech you use to pay for coffee.</span>
+          </li>
+          <li>
+            <span class="icon">🔳</span>
+            <span><strong style="color:var(--cream);display:block;margin-bottom:2px;">QR Code Fallback</strong>No NFC on your device? Scan the QR code. Works on 100% of smartphones.</span>
+          </li>
+          <li>
+            <span class="icon">🎯</span>
+            <span><strong style="color:var(--cream);display:block;margin-bottom:2px;">Shared Interests Reveal</strong>"You and Marcus both love craft IPAs, NFL football, and live blues." Instant conversation starter.</span>
+          </li>
+          <li>
+            <span class="icon">🏠</span>
+            <span><strong style="color:var(--cream);display:block;margin-bottom:2px;">Group QR for New Arrivals</strong>Host one QR code on the table. Everyone who scans it joins your whole circle at once.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section id="waitlist">
+    <div class="waitlist-inner reveal">
+      <span class="section-label">Get Early Access</span>
+      <h2 class="section-title">
+        Be a Founding Member.<br>
+        <span style="color:var(--amber)">First 1,000 get in free.</span>
+      </h2>
+      <p class="section-subtitle" style="margin:16px auto 0;color:rgba(245,237,224,0.55);max-width:480px;">
+        Join the waitlist now. Founding Members get a permanent badge, free premium for one year, 
+        and first access when Brewskr launches in your city.
+      </p>
+      <div class="waitlist-form" id="waitlist-form">
+        <input
+          type="email"
+          id="email-input"
+          class="waitlist-input"
+          placeholder="your@email.com"
+          autocomplete="email"
+        >
+        <button class="waitlist-btn" onclick="submitWaitlist()">Join Now →</button>
+      </div>
+      <div class="waitlist-success" id="waitlist-success">
+        🎉 &nbsp;You're on the list! We'll reach out when Brewskr launches in your city. Tell your friends — the more people on the list, the faster we launch near you.
+      </div>
+      <p class="waitlist-note">No spam. No credit card. Unsubscribe any time. brewskr.com/privacy</p>
+    </div>
+  </section>
+
+  <!-- CITIES -->
+  <section id="cities">
+    <div class="section-inner reveal">
+      <span class="section-label">Expansion Plan</span>
+      <h2 class="section-title" style="color:var(--espresso);">Starting close to home.<br>Growing city by city.</h2>
+      <p class="section-subtitle">We're not trying to be everywhere at once. We're going deep in each market before moving on — because real community takes time to build.</p>
+      <div class="cities-grid">
+        <div class="city-card launch">
+          <div class="launch-badge">🚀 Launch City</div>
+          <span class="city-icon">🤠</span>
+          <span class="city-name">Wichita Falls</span>
+          <span class="city-state">Texas</span>
+          <span class="city-status" style="color:var(--amber);">Waitlist Open Now</span>
+        </div>
+        <div class="city-card">
+          <span class="city-icon">🌵</span>
+          <span class="city-name">Abilene</span>
+          <span class="city-state">Texas</span>
+          <span class="city-status">Next Up — 2025</span>
+        </div>
+        <div class="city-card">
+          <span class="city-icon">🎓</span>
+          <span class="city-name">Lubbock</span>
+          <span class="city-state">Texas</span>
+          <span class="city-status">2025</span>
+        </div>
+        <div class="city-card">
+          <span class="city-icon">🌅</span>
+          <span class="city-name">Amarillo</span>
+          <span class="city-state">Texas</span>
+          <span class="city-status">2026</span>
+        </div>
+        <div class="city-card">
+          <span class="city-icon">⭐</span>
+          <span class="city-name">Dallas–Fort Worth</span>
+          <span class="city-state">Texas</span>
+          <span class="city-status">2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFETY -->
+  <section id="safety">
+    <div class="section-inner reveal">
+      <div>
+        <span class="section-label">Trust & Safety</span>
+        <h2 class="section-title">Built to be safe<br>from the ground up.</h2>
+        <p class="section-subtitle">Real-world connection comes with real-world responsibility. We take that seriously.</p>
+        <ul class="safety-list">
+          <li class="safety-item">
+            <div class="safety-icon">👤</div>
+            <div class="safety-text">
+              <strong>Handles, Not Real Names</strong>
+              <p>You're @whoever you want to be. Your real name, email, and phone are never visible to other users.</p>
+            </div>
+          </li>
+          <li class="safety-item">
+            <div class="safety-icon">📍</div>
+            <div class="safety-text">
+              <strong>Location Privacy by Default</strong>
+              <p>The map is OFF by default. When you opt in, other users see your venue — not your precise GPS coordinates.</p>
+            </div>
+          </li>
+          <li class="safety-item">
+            <div class="safety-icon">🛡️</div>
+            <div class="safety-text">
+              <strong>Block, Report, Protect</strong>
+              <p>One-tap blocking and reporting. Human moderation. We take every report seriously.</p>
+            </div>
+          </li>
+          <li class="safety-item">
+            <div class="safety-icon">🚗</div>
+            <div class="safety-text">
+              <strong>Safe Ride Integration</strong>
+              <p>Emergency ride prompt after 4 hours at a bar. Designated Driver badge earns monthly credits.</p>
+            </div>
+          </li>
+          <li class="safety-item">
+            <div class="safety-icon">🔒</div>
+            <div class="safety-text">
+              <strong>No Ads. No Data Sales.</strong>
+              <p>We will never sell your personal data. We will never show you ads. Our business model is subscriptions — your interests are not for sale.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="safety-visual">
+        <div class="safety-card-stack">
+          <div class="s-card s-card-1">
+            <div class="s-card-label">Location Privacy</div>
+            <div class="s-card-value">Venue-level only</div>
+          </div>
+          <div class="s-card s-card-2">
+            <div class="s-card-label">Data Sales</div>
+            <div class="s-card-value">Never. Ever.</div>
+          </div>
+          <div class="s-card s-card-3">
+            <div class="s-card-label">Ads in Brewskr</div>
+            <div class="s-card-value">$0.00 spent on you</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="section-inner reveal">
+      <span class="section-label">Simple Pricing</span>
+      <h2 class="section-title" style="color:var(--espresso);">Less than a round of drinks<br>to go out every weekend.</h2>
+      <p class="section-subtitle">Start free. Upgrade when you're ready.</p>
+      <div class="pricing-grid">
+
+        <div class="price-card">
+          <div class="price-tier">Free</div>
+          <div class="price-amount">
+            <span class="price-currency">$</span>
+            <span class="price-number">0</span>
+            <span class="price-period">forever</span>
+          </div>
+          <p class="price-desc">Core Brewskr features to get started and test the vibe.</p>
+          <ul class="price-features">
+            <li>Post Shoutouts to your Circles</li>
+            <li>Up to 5 interest tags</li>
+            <li>Circle of up to 10 friends</li>
+            <li>Tap to Connect (NFC + QR)</li>
+            <li>Basic venue discovery</li>
+          </ul>
+          <a href="#waitlist" class="price-cta">Get Started Free</a>
+        </div>
+
+        <div class="price-card featured">
+          <div class="price-badge">Most Popular</div>
+          <div class="price-tier">Social Premium</div>
+          <div class="price-amount">
+            <span class="price-currency">$</span>
+            <span class="price-number">2.99</span>
+            <span class="price-period">/ month</span>
+          </div>
+          <p class="price-desc">Everything you need for an active social life. Less than a beer.</p>
+          <ul class="price-features">
+            <li>Everything in Free</li>
+            <li>Unlimited interest tags</li>
+            <li>Unlimited Circle size</li>
+            <li>Full Good Vibes Map access</li>
+            <li>Event Planning Mode</li>
+            <li>Priority Shoutout delivery</li>
+            <li>Founding Member badge (first 1,000)</li>
+          </ul>
+          <a href="#waitlist" class="price-cta">Join Waitlist</a>
+        </div>
+
+        <div class="price-card">
+          <div class="price-tier">Business</div>
+          <div class="price-amount">
+            <span class="price-currency">$</span>
+            <span class="price-number">29</span>
+            <span class="price-period">/ month</span>
+          </div>
+          <p class="price-desc">For bars, restaurants, and breweries ready to connect with locals.</p>
+          <ul class="price-features">
+            <li>Venue profile page</li>
+            <li>2 Instant Specials per month</li>
+            <li>Interest-matched audience targeting</li>
+            <li>Good Vibes Map listing</li>
+            <li>Basic analytics dashboard</li>
+            <li>+ $49 one-time setup</li>
+          </ul>
+          <a href="mailto:hello@brewskr.com" class="price-cta">Contact Us</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="logo">Brewsk<span>r</span></a>
+          <p>The real-world social app. Built to get you off your phone and into real life — one Shoutout at a time.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#tap">Tap to Connect</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#cities">Our Cities</a></li>
+            <li><a href="#waitlist">Join Waitlist</a></li>
+            <li><a href="mailto:hello@brewskr.com">Contact</a></li>
+            <li><a href="mailto:hello@brewskr.com">For Businesses</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="privacy.html#ccpa">Do Not Sell My Data</a></li>
+            <li><a href="mailto:legal@brewskr.com">Legal Inquiries</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Brewskr, LLC. All Rights Reserved. Tap to Connect® is a trademark of Brewskr, LLC.</p>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="mailto:hello@brewskr.com">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Mobile menu ─────────────────────────────────────
+    function toggleMenu() {
+      document.getElementById('nav-links').classList.toggle('open');
+    }
+    // Close on link click
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.getElementById('nav-links').classList.remove('open');
+      });
+    });
+
+    // ── Scroll reveal ───────────────────────────────────
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // ── Waitlist form ───────────────────────────────────
+    function submitWaitlist() {
+      const email = document.getElementById('email-input').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('email-input').style.borderColor = '#FF6B35';
+        document.getElementById('email-input').placeholder = 'Please enter a valid email';
+        return;
+      }
+      // In production: POST to your backend or a service like Mailchimp / ConvertKit
+      // For now: show success state
+      document.getElementById('waitlist-form').style.display = 'none';
+      document.getElementById('waitlist-success').style.display = 'block';
+
+      // Log to console (replace with real API call)
+      console.log('Waitlist signup:', email);
+    }
+
+    // Allow Enter key in email input
+    document.getElementById('email-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitWaitlist();
+    });
+
+    // ── Nav scroll effect ───────────────────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('nav');
+      if (window.scrollY > 60) {
+        nav.style.borderBottomColor = 'rgba(242,169,59,0.2)';
+      } else {
+        nav.style.borderBottomColor = 'rgba(242,169,59,0.1)';
+      }
+    });
+  </script>
+</body>
+</html>
