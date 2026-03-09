@@ -1,11 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- GOOGLE SEARCH CONSOLE VERIFICATION             -->
+  <!-- ═══════════════════════════════════════════════ -->
   <meta name="google-site-verification" content="F_-aeKFKLp1ImS76y004_VIjp_nOcCikQUne34sBxDA" />
+
   <!-- ═══════════════════════════════════════════════ -->
   <!-- PRIMARY SEO                                    -->
   <!-- ═══════════════════════════════════════════════ -->
@@ -309,7 +313,6 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       margin-bottom: 28px;
-      animation: fade-up 0.8s ease both;
     }
     .hero-pill::before {
       content: '';
@@ -331,7 +334,6 @@
       letter-spacing: -0.03em;
       color: var(--cream);
       margin-bottom: 12px;
-      animation: fade-up 0.8s ease 0.1s both;
     }
     .hero-headline .accent { color: var(--amber); }
     .hero-headline .italic-word {
@@ -348,7 +350,6 @@
       line-height: 1.6;
       max-width: 580px;
       margin: 0 auto 40px;
-      animation: fade-up 0.8s ease 0.2s both;
     }
 
     .hero-actions {
@@ -357,7 +358,6 @@
       justify-content: center;
       gap: 16px;
       flex-wrap: wrap;
-      animation: fade-up 0.8s ease 0.3s both;
     }
 
     .btn-primary {
@@ -413,7 +413,6 @@
       margin-top: 64px;
       padding-top: 40px;
       border-top: 1px solid var(--border);
-      animation: fade-up 0.8s ease 0.4s both;
       flex-wrap: wrap;
     }
     .stat { text-align: center; }
@@ -1144,13 +1143,210 @@
     }
     .footer-legal a:hover { color: var(--amber); }
 
+    /* ── WHY NOW SECTION ─────────────────────────────── */
+    #why {
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    #why .section-inner {
+      position: relative;
+      z-index: 1;
+    }
+    #why::before {
+      content: 'WHY';
+      position: absolute;
+      top: -10px; right: -20px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 220px;
+      color: rgba(242,169,59,0.055);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.04em;
+      z-index: 0;
+    }
+    #why .section-label { color: var(--copper); }
+    #why .section-title { color: var(--espresso); }
+    #why .section-title .accent { color: var(--amber); }
+    #why .section-subtitle { color: rgba(26,18,8,0.6); }
+
+    .why-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 5vw, 72px);
+      align-items: start;
+      margin-top: 56px;
+    }
+    .why-body {
+      font-size: clamp(1rem, 1.6vw, 1.05rem);
+      color: rgba(26,18,8,0.65);
+      line-height: 1.78;
+      margin-bottom: 16px;
+    }
+    .why-body strong { color: var(--espresso); font-weight: 500; }
+    .why-quote {
+      border-left: 4px solid var(--amber);
+      padding: 14px 0 14px 22px;
+      margin: 28px 0;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+      color: var(--espresso);
+      line-height: 1.5;
+    }
+    .why-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--espresso);
+      color: var(--amber);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 14px 26px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(26,18,8,0.15);
+    }
+    .why-cta:hover { background: #2A1F12; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,18,8,0.2); }
+    .why-cta-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .why-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .why-stat {
+      border-radius: 16px;
+      padding: 22px 18px;
+      text-align: center;
+    }
+    .why-stat.dark { background: var(--espresso); }
+    .why-stat.amber { background: var(--amber); }
+    .why-stat-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+      line-height: 1;
+      margin-bottom: 7px;
+      letter-spacing: -0.02em;
+      display: block;
+    }
+    .why-stat.dark .why-stat-num  { color: var(--amber); }
+    .why-stat.amber .why-stat-num { color: var(--espresso); }
+    .why-stat-lbl {
+      font-size: 0.76rem;
+      line-height: 1.4;
+    }
+    .why-stat.dark .why-stat-lbl  { color: rgba(245,237,224,0.55); }
+    .why-stat.amber .why-stat-lbl { color: rgba(26,18,8,0.65); }
+    .why-stat-src {
+      display: block;
+      font-size: 0.63rem;
+      margin-top: 5px;
+    }
+    .why-stat.dark .why-stat-src  { color: rgba(245,237,224,0.2); }
+    .why-stat.amber .why-stat-src { color: rgba(26,18,8,0.3); }
+
+    /* ── VENUES SECTION ──────────────────────────────── */
+    #venues {
+      background: var(--espresso);
+      position: relative;
+      overflow: hidden;
+    }
+    #venues::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(242,169,59,0.07) 0%, transparent 70%);
+      right: -150px; top: -150px;
+      pointer-events: none;
+    }
+    .venues-intro {
+      max-width: 580px;
+      margin-bottom: 52px;
+    }
+    .venue-grid-home {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 14px;
+    }
+    .venue-card-home {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(242,169,59,0.15);
+      border-radius: 18px;
+      padding: 24px 18px;
+      text-align: center;
+      transition: all 0.25s ease;
+      cursor: default;
+    }
+    .venue-card-home:hover {
+      background: rgba(242,169,59,0.08);
+      border-color: var(--amber);
+      transform: translateY(-5px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.3);
+    }
+    .venue-emoji-home { font-size: 2rem; display: block; margin-bottom: 10px; }
+    .venue-name-home {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+    .venue-sub-home {
+      font-size: 0.75rem;
+      color: rgba(245,237,224,0.4);
+      line-height: 1.35;
+    }
+    .venues-shoutout {
+      margin-top: 48px;
+      background: rgba(242,169,59,0.07);
+      border: 1px solid rgba(242,169,59,0.2);
+      border-radius: 20px;
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .venues-shoutout-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--cream);
+      line-height: 1.5;
+    }
+    .venues-shoutout-text strong {
+      font-style: normal;
+      color: var(--amber);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+
     /* ── SCROLL REVEAL ───────────────────────────────── */
+    /* Content always visible; animation enhances on scroll */
     .reveal {
-      opacity: 0;
-      transform: translateY(30px);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .reveal.visible {
+    .reveal.animate-ready {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .reveal.animate-ready.visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -1167,6 +1363,7 @@
       #safety .section-inner { grid-template-columns: 1fr; gap: 48px; }
       .safety-visual { display: none; }
       .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .why-layout { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
@@ -1180,6 +1377,8 @@
       .footer-top { grid-template-columns: 1fr; }
       .section-inner { padding: 70px 20px; }
       .tap-inner { padding: 70px 20px; }
+      .why-stats { grid-template-columns: 1fr 1fr; }
+      .venue-grid-home { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -1193,6 +1392,7 @@
       <li><a href="#features">Features</a></li>
       <li><a href="#cities">Cities</a></li>
       <li><a href="#pricing">Pricing</a></li>
+      <li><a href="why-now.html" style="color:var(--amber);font-weight:500;">Why Now ↗</a></li>
       <li><a href="privacy.html">Privacy</a></li>
       <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
     </ul>
@@ -1241,6 +1441,116 @@
           <span class="stat-number">NFC</span>
           <span class="stat-label">Tap to connect</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY NOW EDITORIAL SECTION -->
+  <section id="why">
+    <div class="section-inner reveal">
+      <span class="section-label">The Brewskr Story</span>
+      <h2 class="section-title">People are lonelier than ever.<br><span class="accent">Let's actually fix that.</span></h2>
+      <p class="section-subtitle">The data is clear. The apps aren't working. The comeback is already happening.</p>
+
+      <div class="why-layout">
+        <!-- Left: editorial text -->
+        <div>
+          <p class="why-body">We have more ways to "connect" than any generation in history — Instagram, group chats, TikTok, Discord. And yet, younger adults are the loneliest they've ever been. Something is deeply broken.</p>
+          <p class="why-body">Here's why: those apps get paid when you scroll. They don't get paid when you put the phone down and actually meet someone. <strong>The incentive is engagement, not connection.</strong></p>
+          <div class="why-quote">"Less scroll. More soul." — that's not just a tagline. It's the whole point of Brewskr.</div>
+          <p class="why-body">The good news? People are already coming back. IRL social events surged 42% in 2024. 77% of Gen Z met their most important relationship in person. The body knows: <strong>being in the room with people is different.</strong> It always was.</p>
+          <a href="why-now.html" class="why-cta">
+            Read the full story
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <span class="why-cta-note">The research, the data, the philosophy — all on one page.</span>
+        </div>
+
+        <!-- Right: stat cards -->
+        <div class="why-stats">
+          <div class="why-stat dark">
+            <span class="why-stat-num">53%</span>
+            <span class="why-stat-lbl">Increase in dining alone in the U.S. since 2003</span>
+            <span class="why-stat-src">World Happiness Report 2025</span>
+          </div>
+          <div class="why-stat dark">
+            <span class="why-stat-num">61%</span>
+            <span class="why-stat-lbl">of Gen Z feel lonelier than a decade ago</span>
+            <span class="why-stat-src">Spotify Culture Next 2024</span>
+          </div>
+          <div class="why-stat amber">
+            <span class="why-stat-num">42%</span>
+            <span class="why-stat-lbl">More people at IRL social events in 2024</span>
+            <span class="why-stat-src">Eventbrite 2024</span>
+          </div>
+          <div class="why-stat amber">
+            <span class="why-stat-num">77%</span>
+            <span class="why-stat-lbl">of Gen Z met their partner IRL, not online</span>
+            <span class="why-stat-src">Hims 2025 Study</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHERE SHOUTOUTS HAPPEN -->
+  <section id="venues">
+    <div class="section-inner reveal">
+      <div class="venues-intro">
+        <span class="section-label">Where It Happens</span>
+        <h2 class="section-title">A Shoutout can happen<br><span style="color:var(--amber)">anywhere people gather.</span></h2>
+        <p class="section-subtitle">You're already there. Tap once and let your circle know the door is open.</p>
+      </div>
+
+      <div class="venue-grid-home">
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">☕</span>
+          <div class="venue-name-home">Coffee Shop</div>
+          <div class="venue-sub-home">Slow afternoon, open seat</div>
+        </div>
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">🍺</span>
+          <div class="venue-name-home">Pub / Bar</div>
+          <div class="venue-sub-home">After work, who's around?</div>
+        </div>
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">🎵</span>
+          <div class="venue-name-home">Concert</div>
+          <div class="venue-sub-home">Already there — who else?</div>
+        </div>
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">⛪</span>
+          <div class="venue-name-home">Church</div>
+          <div class="venue-sub-home">Before or after service</div>
+        </div>
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">🌳</span>
+          <div class="venue-name-home">Park</div>
+          <div class="venue-sub-home">Nice out. Come hang.</div>
+        </div>
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">📚</span>
+          <div class="venue-name-home">Bookstore</div>
+          <div class="venue-sub-home">Browse together</div>
+        </div>
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">🏋️</span>
+          <div class="venue-name-home">Gym</div>
+          <div class="venue-sub-home">Workout partner, anyone?</div>
+        </div>
+        <div class="venue-card-home">
+          <span class="venue-emoji-home">🥐</span>
+          <div class="venue-name-home">Farmers Market</div>
+          <div class="venue-sub-home">Saturday morning vibes</div>
+        </div>
+      </div>
+
+      <div class="venues-shoutout">
+        <div class="venues-shoutout-text">
+          <strong>That's a Shoutout.</strong>
+          "I'm at Lucy Park. Nice out. Who wants to come?"
+        </div>
+        <a href="#waitlist" class="btn-primary" style="white-space:nowrap;">🍺 &nbsp;Join the Waitlist</a>
       </div>
     </div>
   </section>
@@ -1471,25 +1781,25 @@
           <span class="city-icon">🌵</span>
           <span class="city-name">Abilene</span>
           <span class="city-state">Texas</span>
-          <span class="city-status">Next Up — 2025</span>
+          <span class="city-status">Next Up — 2026</span>
         </div>
         <div class="city-card">
           <span class="city-icon">🎓</span>
           <span class="city-name">Lubbock</span>
           <span class="city-state">Texas</span>
-          <span class="city-status">2025</span>
+          <span class="city-status">2026</span>
         </div>
         <div class="city-card">
           <span class="city-icon">🌅</span>
           <span class="city-name">Amarillo</span>
           <span class="city-state">Texas</span>
-          <span class="city-status">2026</span>
+          <span class="city-status">Coming Soon</span>
         </div>
         <div class="city-card">
           <span class="city-icon">⭐</span>
           <span class="city-name">Dallas–Fort Worth</span>
           <span class="city-state">Texas</span>
-          <span class="city-status">2026</span>
+          <span class="city-status">Coming Soon</span>
         </div>
       </div>
     </div>
@@ -1622,7 +1932,7 @@
             <li>Basic analytics dashboard</li>
             <li>+ $49 one-time setup</li>
           </ul>
-          <a href="mailto:hello@brewskr.com" class="price-cta">Contact Us</a>
+          <a href="/cdn-cgi/l/email-protection#1078757c7c7f5072627567637b623e737f7d" class="price-cta">Contact Us</a>
         </div>
 
       </div>
@@ -1649,10 +1959,11 @@
         <div class="footer-col">
           <h4>Company</h4>
           <ul>
+            <li><a href="why-now.html" style="color:var(--amber)">Why Now ↗</a></li>
             <li><a href="#cities">Our Cities</a></li>
             <li><a href="#waitlist">Join Waitlist</a></li>
-            <li><a href="mailto:hello@brewskr.com">Contact</a></li>
-            <li><a href="mailto:hello@brewskr.com">For Businesses</a></li>
+            <li><a href="/cdn-cgi/l/email-protection#79111c151516391b0b1c0e0a120b571a1614">Contact</a></li>
+            <li><a href="/cdn-cgi/l/email-protection#bdd5d8d1d1d2fddfcfd8caced6cf93ded2d0">For Businesses</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -1661,22 +1972,25 @@
             <li><a href="privacy.html">Privacy Policy</a></li>
             <li><a href="terms.html">Terms of Service</a></li>
             <li><a href="privacy.html#ccpa">Do Not Sell My Data</a></li>
-            <li><a href="mailto:legal@brewskr.com">Legal Inquiries</a></li>
+            <li><a href="/cdn-cgi/l/email-protection#58343d3f3934183a2a3d2f2b332a763b3735">Legal Inquiries</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 Brewskr, LLC. All Rights Reserved. Tap to Connect® is a trademark of Brewskr, LLC.</p>
+        <p>© 2026 Brewskr, LLC. All Rights Reserved. Tap to Connect® is a trademark of Brewskr, LLC.</p>
         <div class="footer-legal">
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
-          <a href="mailto:hello@brewskr.com">Contact</a>
+          <a href="/cdn-cgi/l/email-protection#dcb4b9b0b0b39cbeaeb9abafb7aef2bfb3b1">Contact</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ── Progressive enhancement: enable animations only when JS runs
+
+
     // ── Mobile menu ─────────────────────────────────────
     function toggleMenu() {
       document.getElementById('nav-links').classList.toggle('open');
@@ -1690,6 +2004,7 @@
 
     // ── Scroll reveal ───────────────────────────────────
     const revealEls = document.querySelectorAll('.reveal');
+    // Mark elements OUT of viewport as ready to animate in
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -1697,8 +2012,15 @@
           observer.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1 });
-    revealEls.forEach(el => observer.observe(el));
+    }, { threshold: 0.05, rootMargin: '0px 0px -60px 0px' });
+    revealEls.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top > window.innerHeight) {
+        // Only animate elements below the fold
+        el.classList.add('animate-ready');
+      }
+      observer.observe(el);
+    });
 
     // ── Waitlist form (Netlify Forms) ────────────────────
     function handleWaitlistSubmit(e) {
@@ -1727,14 +2049,4 @@
     }
 
     // ── Nav scroll effect ───────────────────────────────
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('nav');
-      if (window.scrollY > 60) {
-        nav.style.borderBottomColor = 'rgba(242,169,59,0.2)';
-      } else {
-        nav.style.borderBottomColor = 'rgba(242,169,59,0.1)';
-      }
-    });
-  </script>
-</body>
-</html>
+    

@@ -1,10 +1,16 @@
-# Brewskr — Netlify Configuration
-# This file tells Netlify how to serve your website
-
 [build]
   publish = "."
 
-# Clean URLs — /privacy instead of /privacy.html
+[[redirects]]
+  from = "/why-now"
+  to = "/why-now.html"
+  status = 200
+
+[[redirects]]
+  from = "/why-now/"
+  to = "/why-now.html"
+  status = 200
+
 [[redirects]]
   from = "/privacy"
   to = "/privacy.html"
@@ -15,18 +21,9 @@
   to = "/terms.html"
   status = 200
 
-# www → non-www redirect
-[[redirects]]
-  from = "https://www.brewskr.com/*"
-  to = "https://brewskr.com/:splat"
-  status = 301
-  force = true
-
-# Security headers
 [[headers]]
-  for = "/*"
+  for = "/*.html"
   [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
+    Cache-Control = "public, max-age=3600"
+    X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
