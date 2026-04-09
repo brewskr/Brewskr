@@ -18,12 +18,10 @@
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://brewskr.com/why-now.html</loc>
+    <lastmod>2026-03-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
-```
-
-6. Repeat for a new file named `robots.txt` with this content:
-```
-User-agent: *
-Allow: /
-
-Sitemap: https://brewskr.com/sitemap.xml
